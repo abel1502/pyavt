@@ -11,6 +11,14 @@ Using pip:
 pip install pyavt
 ```
 
+## Usage
+
+```python
+import avt
+
+# TODO: Example
+```
+
 ## License
 
 © 2026 Andrey Belyaev
