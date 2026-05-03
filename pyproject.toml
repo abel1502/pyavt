@@ -9,7 +9,7 @@ authors = [{ name = "abel1502" }]
 readme = "README.md"
 license = "Apache-2.0"
 requires-python = ">=3.8"
-urls.repository = "https://github.com/abel1502/pyavt"
+urls.Repository = "https://github.com/abel1502/pyavt"
 classifiers = [
     "Programming Language :: Rust",
     "Programming Language :: Python :: Implementation :: CPython",
