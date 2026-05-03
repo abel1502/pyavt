@@ -321,7 +321,7 @@ impl Vt {
 
 mod parser;
 mod terminal;
-mod utils;
+mod util;
 
 fn add_submodule<'a>(
     py: Python<'a>,
@@ -351,7 +351,7 @@ fn avt_module(py: Python<'_>, m: &Bound<'_, PyModule>) -> PyResult<()> {
 
     add_submodule(py, m, parser::init_module, "avt._avt.parser")?;
     add_submodule(py, m, terminal::init_module, "avt._avt.terminal")?;
-    add_submodule(py, m, utils::init_module, "avt._avt.utils")?;
+    add_submodule(py, m, util::init_module, "avt._avt.util")?;
 
     Ok(())
 }
