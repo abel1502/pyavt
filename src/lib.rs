@@ -322,10 +322,13 @@ impl Vt {
     }
 }
 
-// TODO: pub modules too
+// TODO: pub modules too:
+// parser.{Parser.{new, feed}, State, Function, AnsiMode, CtcOp, DecMode, EdScope, ElScope, SgrOp, TbcScope, XtwinopsOp}
+// terminal.{Cursor, Terminal.{new, size, active_buffer_type, execute, cursor, gc, changes, resize, view, lines, line, text, cursor_keys_app_mode, dump}, BufferType}
+// utils.{TextUnwrapper.{new, push, flush}, TextCollector.{new, feed_str, resize, flush}}
 
 #[pymodule(name = "avt")]
-fn avt_module(py: Python<'_>, m: &Bound<'_, PyModule>) -> PyResult<()> {
+fn avt_module(_py: Python<'_>, m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add("__version__", VERSION)?;
     m.add_class::<Cell>()?;
     m.add_class::<Charset>()?;
