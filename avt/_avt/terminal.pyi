@@ -37,3 +37,4 @@ class Terminal:
 class BufferType:
     Primary: typing.Final[BufferType]
     Alternate: typing.Final[BufferType]
+
