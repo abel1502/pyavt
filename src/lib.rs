@@ -304,11 +304,10 @@ impl Vt {
         self.0.text()
     }
 
-    // TODO: uncomment once mod terminal is ported
-    // #[getter]
-    // fn cursor(&self) -> Cursor {
-    //     self.0.cursor()
-    // }
+    #[getter]
+    fn cursor(&self) -> terminal::Cursor {
+        terminal::Cursor(self.0.cursor())
+    }
 
     #[getter]
     fn cursor_key_app_mode(&self) -> bool {

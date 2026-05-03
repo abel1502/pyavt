@@ -39,8 +39,8 @@ pub(crate) enum State {
     SosPmApcString,
 }
 
-#[pyclass(module = "avt.parser", skip_from_py_object, frozen, eq)]
-#[derive(Debug, PartialEq)]
+#[pyclass(module = "avt.parser", from_py_object, frozen, eq)]
+#[derive(Debug, PartialEq, Clone)]
 pub(crate) enum Function {
     Bs(),
     Cbt(u16),
