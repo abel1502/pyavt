@@ -1,5 +1,5 @@
 use derive_into::Convert;
-use pyo3::{PyTypeInfo, exceptions::PyTypeError, prelude::*};
+use pyo3::prelude::*;
 use avt;
 
 #[pyclass(module = "avt.parser", skip_from_py_object)]
