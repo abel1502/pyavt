@@ -9,26 +9,31 @@ struct Cell(avt::Cell);
 
 #[pymethods]
 impl Cell {
-    pub fn is_default(&self) -> bool {
+    #[new]
+    fn new() -> Self {
+        Self::default()
+    }
+
+    fn is_default(&self) -> bool {
         self.0.is_default()
     }
 
     #[getter]
-    pub fn char(&self) -> char {
+    fn char(&self) -> char {
         self.0.char()
     }
 
     #[getter]
-    pub fn width(&self) -> usize {
+    fn width(&self) -> usize {
         self.0.width()
     }
 
     #[getter]
-    pub fn pen(&self) -> Pen {
+    fn pen(&self) -> Pen {
         Pen(self.0.pen().clone())
     }
 
-    pub fn set(&mut self, ch: char, width: usize, pen: &Pen) {
+    fn set(&mut self, ch: char, width: usize, pen: &Pen) {
         self.0.set(ch, width, pen.0.clone());
     }
 }
@@ -60,7 +65,7 @@ impl From<Charset> for avt::Charset {
 
 #[pymethods]
 impl Charset {
-    pub fn translate(&self, ch: char) -> char {
+    fn translate(&self, ch: char) -> char {
         avt::Charset::from(self.clone()).translate(ch)
     }
 }
@@ -96,20 +101,20 @@ struct Line(avt::Line);
 
 #[pymethods]
 impl Line {
-    pub fn __len__(&self) -> usize {
+    fn __len__(&self) -> usize {
         self.0.len()
     }
 
-    pub fn is_empty(&self) -> bool {
+    fn is_empty(&self) -> bool {
         self.0.is_empty()
     }
 
     #[getter]
-    pub fn cells(&self) -> Vec<Cell> {
+    fn cells(&self) -> Vec<Cell> {
         self.0.cells().iter().map(|c| Cell(*c)).collect()
     }
 
-    pub fn __getitem__(&self, index: usize) -> PyResult<Cell> {
+    fn __getitem__(&self, index: usize) -> PyResult<Cell> {
         self.0.cells().get(index).copied().map(Cell).ok_or(PyIndexError::new_err("Cell index out of range"))
     }
 
@@ -137,7 +142,7 @@ impl Line {
     // No chars() because without an interator, it's the exact same as text()
 
     #[getter]
-    pub fn text(&self) -> String {
+    fn text(&self) -> String {
         self.0.text()
     }
 }
@@ -148,53 +153,62 @@ struct Pen(avt::Pen);
 
 #[pymethods]
 impl Pen {
+    #[new]
+    fn new() -> Self {
+        Self::default()
+    }
+
+    fn is_default(&self) -> bool {
+        self.0.is_default()
+    }
+
     #[getter]
-    pub fn foreground(&self) -> Option<Color> {
+    fn foreground(&self) -> Option<Color> {
         self.0.foreground().map(|c| Color::from(c))
     }
 
     #[getter]
-    pub fn background(&self) -> Option<Color> {
+    fn background(&self) -> Option<Color> {
         self.0.background().map(|c| Color::from(c))
     }
 
     #[getter]
-    pub fn bold(&self) -> bool {
+    fn bold(&self) -> bool {
         self.0.is_bold()
     }
 
     #[getter]
-    pub fn faint(&self) -> bool {
+    fn faint(&self) -> bool {
         self.0.is_faint()
     }
 
     #[getter]
-    pub fn italic(&self) -> bool {
+    fn italic(&self) -> bool {
         self.0.is_italic()
     }
 
     #[getter]
-    pub fn underline(&self) -> bool {
+    fn underline(&self) -> bool {
         self.0.is_underline()
     }
 
     #[getter]
-    pub fn strikethrough(&self) -> bool {
+    fn strikethrough(&self) -> bool {
         self.0.is_strikethrough()
     }
 
     #[getter]
-    pub fn blink(&self) -> bool {
+    fn blink(&self) -> bool {
         self.0.is_blink()
     }
 
     #[getter]
-    pub fn inverse(&self) -> bool {
+    fn inverse(&self) -> bool {
         self.0.is_inverse()
     }
 
     #[setter]
-    pub fn set_italic(&mut self, value: bool) {
+    fn set_italic(&mut self, value: bool) {
         if value {
             self.0.set_italic();
         } else {
@@ -203,7 +217,7 @@ impl Pen {
     }
 
     #[setter]
-    pub fn set_underline(&mut self, value: bool) {
+    fn set_underline(&mut self, value: bool) {
         if value {
             self.0.set_underline();
         } else {
@@ -212,7 +226,7 @@ impl Pen {
     }
 
     #[setter]
-    pub fn set_blink(&mut self, value: bool) {
+    fn set_blink(&mut self, value: bool) {
         if value {
             self.0.set_blink();
         } else {
@@ -221,7 +235,7 @@ impl Pen {
     }
 
     #[setter]
-    pub fn set_strikethrough(&mut self, value: bool) {
+    fn set_strikethrough(&mut self, value: bool) {
         if value {
             self.0.set_strikethrough();
         } else {
@@ -230,16 +244,12 @@ impl Pen {
     }
 
     #[setter]
-    pub fn set_inverse(&mut self, value: bool) {
+    fn set_inverse(&mut self, value: bool) {
         if value {
             self.0.set_inverse();
         } else {
             self.0.unset_inverse();
         }
-    }
-
-    pub fn is_default(&self) -> bool {
-        self.0.is_default()
     }
 }
 
