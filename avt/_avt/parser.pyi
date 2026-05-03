@@ -8,20 +8,20 @@ class Parser:
 
 
 class State:
-    Ground: typing.ClassVar[State]
-    Escape: typing.ClassVar[State]
-    EscapeIntermediate: typing.ClassVar[State]
-    CsiEntry: typing.ClassVar[State]
-    CsiParam: typing.ClassVar[State]
-    CsiIntermediate: typing.ClassVar[State]
-    CsiIgnore: typing.ClassVar[State]
-    DcsEntry: typing.ClassVar[State]
-    DcsParam: typing.ClassVar[State]
-    DcsIntermediate: typing.ClassVar[State]
-    DcsPassthrough: typing.ClassVar[State]
-    DcsIgnore: typing.ClassVar[State]
-    OscString: typing.ClassVar[State]
-    SosPmApcString: typing.ClassVar[State]
+    Ground: typing.Final[State]
+    Escape: typing.Final[State]
+    EscapeIntermediate: typing.Final[State]
+    CsiEntry: typing.Final[State]
+    CsiParam: typing.Final[State]
+    CsiIntermediate: typing.Final[State]
+    CsiIgnore: typing.Final[State]
+    DcsEntry: typing.Final[State]
+    DcsParam: typing.Final[State]
+    DcsIntermediate: typing.Final[State]
+    DcsPassthrough: typing.Final[State]
+    DcsIgnore: typing.Final[State]
+    OscString: typing.Final[State]
+    SosPmApcString: typing.Final[State]
 
 
 class Function:
@@ -211,37 +211,37 @@ class Function:
 
 
 class AnsiMode:
-    Insert: typing.ClassVar[AnsiMode]
-    NewLine: typing.ClassVar[AnsiMode]
+    Insert: typing.Final[AnsiMode]
+    NewLine: typing.Final[AnsiMode]
 
 
 class CtcOp:
-    Set: typing.ClassVar[CtcOp]
-    ClearCurrentColumn: typing.ClassVar[CtcOp]
-    ClearAll: typing.ClassVar[CtcOp]
+    Set: typing.Final[CtcOp]
+    ClearCurrentColumn: typing.Final[CtcOp]
+    ClearAll: typing.Final[CtcOp]
 
 
 class DecMode:
-    CursorKeys: typing.ClassVar[DecMode]
-    Origin: typing.ClassVar[DecMode]
-    AutoWrap: typing.ClassVar[DecMode]
-    TextCursorEnable: typing.ClassVar[DecMode]
-    AltScreenBuffer: typing.ClassVar[DecMode]
-    SaveCursor: typing.ClassVar[DecMode]
-    SaveCursorAltScreenBuffer: typing.ClassVar[DecMode]
+    CursorKeys: typing.Final[DecMode]
+    Origin: typing.Final[DecMode]
+    AutoWrap: typing.Final[DecMode]
+    TextCursorEnable: typing.Final[DecMode]
+    AltScreenBuffer: typing.Final[DecMode]
+    SaveCursor: typing.Final[DecMode]
+    SaveCursorAltScreenBuffer: typing.Final[DecMode]
 
 
 class EdScope:
-    Below: typing.ClassVar[EdScope]
-    Above: typing.ClassVar[EdScope]
-    All: typing.ClassVar[EdScope]
-    SavedLines: typing.ClassVar[EdScope]
+    Below: typing.Final[EdScope]
+    Above: typing.Final[EdScope]
+    All: typing.Final[EdScope]
+    SavedLines: typing.Final[EdScope]
 
 
 class ElScope:
-    ToRight: typing.ClassVar[ElScope]
-    ToLeft: typing.ClassVar[ElScope]
-    All: typing.ClassVar[ElScope]
+    ToRight: typing.Final[ElScope]
+    ToLeft: typing.Final[ElScope]
+    All: typing.Final[ElScope]
 
 
 class SgrOp:
@@ -303,8 +303,8 @@ class SgrOp:
 
 
 class TbcScope:
-    CurrentColumn: typing.ClassVar[TbcScope]
-    All: typing.ClassVar[TbcScope]
+    CurrentColumn: typing.Final[TbcScope]
+    All: typing.Final[TbcScope]
 
 
 class XtwinopsOp:

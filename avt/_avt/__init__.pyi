@@ -17,8 +17,8 @@ class Cell:
 
 
 class Charset:
-    Ascii: typing.ClassVar[Charset]
-    Drawing: typing.ClassVar[Charset]
+    Ascii: typing.Final[Charset]
+    Drawing: typing.Final[Charset]
     
     def translate(self, ch: str) -> str: ...
 
