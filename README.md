@@ -19,6 +19,8 @@ import avt
 # TODO: Example
 ```
 
+No automated tests exist yet. Report any issues you find.
+
 ## License
 
 © 2026 Andrey Belyaev
