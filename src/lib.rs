@@ -4,7 +4,7 @@ use avt;
 const VERSION: &'static str = env!("CARGO_PKG_VERSION");
 
 #[pyclass(skip_from_py_object)]
-#[derive(Debug, Copy, Clone, PartialEq, Eq)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Default)]
 struct Cell(avt::Cell);
 
 #[pymethods]
@@ -139,8 +139,105 @@ impl Line {
 }
 
 #[pyclass(skip_from_py_object)]
-#[derive(Debug, Copy, Clone, PartialEq, Eq)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Default)]
 struct Pen(avt::Pen);
+
+#[pymethods]
+impl Pen {
+    #[getter]
+    pub fn foreground(&self) -> Option<Color> {
+        self.0.foreground().map(|c| Color::from(c))
+    }
+
+    #[getter]
+    pub fn background(&self) -> Option<Color> {
+        self.0.background().map(|c| Color::from(c))
+    }
+
+    #[getter]
+    pub fn bold(&self) -> bool {
+        self.0.is_bold()
+    }
+
+    #[getter]
+    pub fn faint(&self) -> bool {
+        self.0.is_faint()
+    }
+
+    #[getter]
+    pub fn italic(&self) -> bool {
+        self.0.is_italic()
+    }
+
+    #[getter]
+    pub fn underline(&self) -> bool {
+        self.0.is_underline()
+    }
+
+    #[getter]
+    pub fn strikethrough(&self) -> bool {
+        self.0.is_strikethrough()
+    }
+
+    #[getter]
+    pub fn blink(&self) -> bool {
+        self.0.is_blink()
+    }
+
+    #[getter]
+    pub fn inverse(&self) -> bool {
+        self.0.is_inverse()
+    }
+
+    #[setter]
+    pub fn set_italic(&mut self, value: bool) {
+        if value {
+            self.0.set_italic();
+        } else {
+            self.0.unset_italic();
+        }
+    }
+
+    #[setter]
+    pub fn set_underline(&mut self, value: bool) {
+        if value {
+            self.0.set_underline();
+        } else {
+            self.0.unset_underline();
+        }
+    }
+
+    #[setter]
+    pub fn set_blink(&mut self, value: bool) {
+        if value {
+            self.0.set_blink();
+        } else {
+            self.0.unset_blink();
+        }
+    }
+
+    #[setter]
+    pub fn set_strikethrough(&mut self, value: bool) {
+        if value {
+            self.0.set_strikethrough();
+        } else {
+            self.0.unset_strikethrough();
+        }
+    }
+
+    #[setter]
+    pub fn set_inverse(&mut self, value: bool) {
+        if value {
+            self.0.set_inverse();
+        } else {
+            self.0.unset_inverse();
+        }
+    }
+
+    pub fn is_default(&self) -> bool {
+        self.0.is_default()
+    }
+}
 
 #[pyclass]
 #[derive(Debug)]
