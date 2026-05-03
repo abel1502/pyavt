@@ -37,6 +37,10 @@ impl Cell {
     fn set(&mut self, ch: char, width: usize, pen: &Pen) {
         self.0.set(ch, width, pen.0.clone());
     }
+
+    fn __repr__(&self) -> String {
+        format!("{:?}", self.0)
+    }
 }
 
 #[pyclass(module = "avt", from_py_object, frozen, eq, eq_int)]
@@ -135,6 +139,10 @@ impl Line {
     #[getter]
     fn text(&self) -> String {
         self.0.text()
+    }
+
+    fn __repr__(&self) -> String {
+        format!("Line({:?})", self.0)
     }
 }
 
@@ -242,6 +250,10 @@ impl Pen {
             self.0.unset_inverse();
         }
     }
+
+    fn __repr__(&self) -> String {
+        format!("{:?}", self.0)
+    }
 }
 
 #[pyclass(module = "avt")]
@@ -251,7 +263,7 @@ struct Vt(avt::Vt);
 #[pymethods]
 impl Vt {
     #[new]
-    #[pyo3(signature = (cols, rows, scrollback_limit = None))]
+    #[pyo3(signature = (cols = 80, rows = 24, scrollback_limit = None))]
     fn new(cols: usize, rows: usize, scrollback_limit: Option<usize>) -> Self {
         let mut builder = avt::Vt::builder();
         builder.size(cols, rows);

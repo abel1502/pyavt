@@ -32,6 +32,10 @@ impl Cursor {
     fn visible(&self) -> bool {
         self.0.visible
     }
+
+    fn __repr__(&self) -> String {
+        format!("Cursor(col={}, row={}, visible={})", self.0.col, self.0.row, self.0.visible)
+    }
 }
 
 #[pyclass(module = "avt.terminal", skip_from_py_object)]
