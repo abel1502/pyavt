@@ -1,5 +1,12 @@
 # PyAVT - Python bindings for the AVT virtual terminal emulator
 
+[![PyPI version](https://img.shields.io/pypi/v/pyavt.svg)](https://pypi.org/project/pyavt/)
+[![Python versions](https://img.shields.io/pypi/pyversions/pyavt.svg)](https://pypi.org/project/pyavt/)
+[![Downloads](https://pepy.tech/badge/pyavt)](https://pepy.tech/project/pyavt)
+[![CI](https://github.com/abel1502/pyavt/actions/workflows/CI.yml/badge.svg)](https://github.com/abel1502/pyavt)
+[![Type hints](https://img.shields.io/badge/typing-typed-blue.svg)](https://peps.python.org/pep-0484/)
+[![License](https://img.shields.io/pypi/l/pyavt.svg)](LICENSE)
+
 This project is a thin wrapper around [AVT](https://github.com/asciinema/avt),
 a virtual terminal emulator developed by asciinema.
 
