@@ -1,4 +1,4 @@
-# PyAVT - Python bindings for AVT virtual terminal emulator
+# PyAVT - Python bindings for the AVT virtual terminal emulator
 
 This project is a thin wrapper around [AVT](https://github.com/asciinema/avt),
 a virtual terminal emulator developed by asciinema.
