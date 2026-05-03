@@ -1,4 +1,4 @@
-use pyo3::prelude::*;
+use pyo3::{exceptions::PyIndexError, prelude::*};
 use avt;
 
 const VERSION: &'static str = env!("CARGO_PKG_VERSION");
@@ -242,6 +242,81 @@ impl Pen {
 #[pyclass]
 #[derive(Debug)]
 struct Vt(avt::Vt);
+
+#[pymethods]
+impl Vt {
+    #[new]
+    #[pyo3(signature = (cols, rows, scrollback_limit = None))]
+    fn new(cols: usize, rows: usize, scrollback_limit: Option<usize>) -> Self {
+        let mut builder = avt::Vt::builder();
+        builder.size(cols, rows);
+        if let Some(limit) = scrollback_limit {
+            builder.scrollback_limit(limit);
+        }
+        Self(builder.build())
+    }
+
+    // TODO: The scrollback might actually benefit from being an iterator
+    // TODO: Return a namedtuple?
+    /// Returns a tuple of `(lines, scrollback)`
+    fn feed_str(&mut self, s: &str) -> (Vec<usize>, Vec<Line>) {
+        let changes = self.0.feed_str(s);
+        (changes.lines, changes.scrollback.map(Line).collect())
+    }
+
+    fn feed(&mut self, input: char) {
+        self.0.feed(input)
+    }
+
+    #[getter]
+    fn size(&self) -> (usize, usize) {
+        self.0.size()
+    }
+
+    // TODO: Same as feed_str. Also, perhaps unify the behavior regardless
+    /// Returns a tuple of `(lines, scrollback)`
+    fn resize(&mut self, cols: usize, rows: usize) -> (Vec<usize>, Vec<Line>) {
+        let changes = self.0.resize(cols, rows);
+        (changes.lines, changes.scrollback.map(Line).collect())
+    }
+
+    // TODO: Can be an interator
+    fn view(&self) -> Vec<Line> {
+        self.0.view().map(|l| Line(l.clone())).collect()
+    }
+
+    // TODO: Can be an interator
+    fn lines(&self) -> Vec<Line> {
+        self.0.lines().map(|l| Line(l.clone())).collect()
+    }
+
+    // TODO: Maybe preserve the reference somehow?
+    fn __getattr__(&self, index: usize) -> PyResult<Line> {
+        if index >= self.0.lines().count() {
+            return Err(PyIndexError::new_err("Line index out of range"));
+        }
+        Ok(Line(self.0.line(index).clone()))
+    }
+
+    fn text(&self) -> Vec<String> {
+        self.0.text()
+    }
+
+    // TODO: uncomment once mod terminal is ported
+    // #[getter]
+    // fn cursor(&self) -> Cursor {
+    //     self.0.cursor()
+    // }
+
+    #[getter]
+    fn cursor_key_app_mode(&self) -> bool {
+        self.0.cursor_key_app_mode()
+    }
+
+    fn dump(&self) -> String {
+        self.0.dump()
+    }
+}
 
 // TODO: pub modules too
 
