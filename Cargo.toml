@@ -9,4 +9,5 @@ crate-type = ["cdylib"]
 
 [dependencies]
 avt = "0.17.0"
+derive-into = "0.2.4"
 pyo3 = "0.28.2"

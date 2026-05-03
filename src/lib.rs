@@ -1,3 +1,4 @@
+use derive_into::Convert;
 use pyo3::{exceptions::PyIndexError, prelude::*};
 use avt;
 
@@ -38,29 +39,12 @@ impl Cell {
     }
 }
 
-#[pyclass(module = "avt", skip_from_py_object, frozen, eq, eq_int)]
-#[derive(Debug, Copy, Clone, PartialEq, Eq)]
+#[pyclass(module = "avt", from_py_object, frozen, eq, eq_int)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Convert)]
+#[convert(from(path = "avt::Charset"), into(path = "avt::Charset"))]
 enum Charset {
     Ascii,
     Drawing,
-}
-
-impl From<avt::Charset> for Charset {
-    fn from(other: avt::Charset) -> Self {
-        match other {
-            avt::Charset::Ascii => Charset::Ascii,
-            avt::Charset::Drawing => Charset::Drawing,
-        }
-    }
-}
-
-impl From<Charset> for avt::Charset {
-    fn from(other: Charset) -> Self {
-        match other {
-            Charset::Ascii => avt::Charset::Ascii,
-            Charset::Drawing => avt::Charset::Drawing,
-        }
-    }
 }
 
 #[pymethods]
@@ -70,7 +54,7 @@ impl Charset {
     }
 }
 
-#[pyclass(module = "avt", skip_from_py_object, frozen, eq)]
+#[pyclass(module = "avt", from_py_object, frozen, eq)]
 #[derive(Debug, Copy, Clone, PartialEq, Eq)]
 enum Color{
     Indexed(u8),
@@ -349,7 +333,7 @@ fn add_submodule<'a>(
     Ok(submodule)
 }
 
-#[pymodule(name = "avt")]
+#[pymodule(name = "_avt")]
 fn avt_module(py: Python<'_>, m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add("__version__", VERSION)?;
     m.add_class::<Cell>()?;
@@ -359,9 +343,9 @@ fn avt_module(py: Python<'_>, m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_class::<Pen>()?;
     m.add_class::<Vt>()?;
 
-    add_submodule(py, m, parser::init_module, "avt.parser")?;
-    add_submodule(py, m, terminal::init_module, "avt.terminal")?;
-    add_submodule(py, m, utils::init_module, "avt.utils")?;
+    add_submodule(py, m, parser::init_module, "avt._avt.parser")?;
+    add_submodule(py, m, terminal::init_module, "avt._avt.terminal")?;
+    add_submodule(py, m, utils::init_module, "avt._avt.utils")?;
 
     Ok(())
 }

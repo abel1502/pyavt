@@ -24,11 +24,11 @@ class Charset:
 
 
 class Color:
-    class RGB:
+    class RGB(Color):
         def __init__(self, r: int, g: int, b: int) -> None: ...
         def __getitem__(self, index: typing.Literal[0, 1, 2]) -> int: ...
     
-    class Indexed:
+    class Indexed(Color):
         def __init__(self, index: int) -> None: ...
         def __getitem__(self, index: typing.Literal[0]) -> int: ...
 
