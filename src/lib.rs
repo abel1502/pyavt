@@ -3,7 +3,7 @@ use avt;
 
 const VERSION: &'static str = env!("CARGO_PKG_VERSION");
 
-#[pyclass(skip_from_py_object)]
+#[pyclass(skip_from_py_object, eq)]
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Default)]
 struct Cell(avt::Cell);
 
@@ -33,7 +33,7 @@ impl Cell {
     }
 }
 
-#[pyclass(skip_from_py_object, eq, eq_int)]
+#[pyclass(skip_from_py_object, frozen, eq, eq_int)]
 #[derive(Debug, Copy, Clone, PartialEq, Eq)]
 enum Charset {
     Ascii,
@@ -65,7 +65,7 @@ impl Charset {
     }
 }
 
-#[pyclass(skip_from_py_object)]
+#[pyclass(skip_from_py_object, frozen, eq)]
 #[derive(Debug, Copy, Clone, PartialEq, Eq)]
 enum Color{
     Indexed(u8),
@@ -90,7 +90,7 @@ impl From<Color> for avt::Color {
     }
 }
 
-#[pyclass(skip_from_py_object)]
+#[pyclass(skip_from_py_object, frozen, eq)]
 #[derive(Clone, PartialEq)]
 struct Line(avt::Line);
 
@@ -142,7 +142,7 @@ impl Line {
     }
 }
 
-#[pyclass(skip_from_py_object)]
+#[pyclass(skip_from_py_object, eq)]
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Default)]
 struct Pen(avt::Pen);
 
@@ -284,17 +284,14 @@ impl Vt {
         (changes.lines, changes.scrollback.map(Line).collect())
     }
 
-    // TODO: Can be an interator
     fn view(&self) -> Vec<Line> {
         self.0.view().map(|l| Line(l.clone())).collect()
     }
 
-    // TODO: Can be an interator
     fn lines(&self) -> Vec<Line> {
         self.0.lines().map(|l| Line(l.clone())).collect()
     }
 
-    // TODO: Maybe preserve the reference somehow?
     fn __getitem__(&self, index: usize) -> PyResult<Line> {
         if index >= self.0.lines().count() {
             return Err(PyIndexError::new_err("Line index out of range"));
