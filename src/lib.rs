@@ -79,6 +79,13 @@ impl From<Color> for avt::Color {
     }
 }
 
+#[pymethods]
+impl Color {
+    fn __repr__(&self) -> String {
+        format!("Color.{:?}", self)
+    }
+}
+
 #[pyclass(module = "avt", skip_from_py_object, frozen, eq)]
 #[derive(Clone, PartialEq)]
 struct Line(avt::Line);

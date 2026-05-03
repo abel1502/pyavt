@@ -210,6 +210,13 @@ impl From<Function> for avt::parser::Function {
     }
 }
 
+#[pymethods]
+impl Function {
+    fn __repr__(&self) -> PyResult<String> {
+        Ok(format!("Function.{:?}", self))
+    }
+}
+
 #[pyclass(module = "avt.parser", from_py_object, frozen, eq, eq_int)]
 #[derive(Debug, PartialEq, Clone, Copy, Convert)]
 #[convert(from(path = "avt::parser::AnsiMode"), into(path = "avt::parser::AnsiMode"))]
@@ -382,6 +389,13 @@ impl From<SgrOp> for avt::parser::SgrOp {
             SgrOp::SetBackgroundColor(color) => SetBackgroundColor(color.into()),
             SgrOp::ResetBackgroundColor() => ResetBackgroundColor,
         }
+    }
+}
+
+#[pymethods]
+impl SgrOp {
+    fn __repr__(&self) -> PyResult<String> {
+        Ok(format!("SgrOp.{:?}", self))
     }
 }
 
