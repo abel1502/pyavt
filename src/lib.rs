@@ -109,6 +109,10 @@ impl Line {
         self.0.cells().iter().map(|c| Cell(*c)).collect()
     }
 
+    pub fn __getitem__(&self, index: usize) -> PyResult<Cell> {
+        self.0.cells().get(index).copied().map(Cell).ok_or(PyIndexError::new_err("Cell index out of range"))
+    }
+
     // Could theoretically be an iterator, but the memory is laughable (how big can a line be?), and the overhead from repeated calls into and out of Python for an iterator would make it pointless
     fn chunks(
         &self,
@@ -291,7 +295,7 @@ impl Vt {
     }
 
     // TODO: Maybe preserve the reference somehow?
-    fn __getattr__(&self, index: usize) -> PyResult<Line> {
+    fn __getitem__(&self, index: usize) -> PyResult<Line> {
         if index >= self.0.lines().count() {
             return Err(PyIndexError::new_err("Line index out of range"));
         }
