@@ -3,7 +3,7 @@ use avt;
 
 const VERSION: &'static str = env!("CARGO_PKG_VERSION");
 
-#[pyclass(skip_from_py_object, eq)]
+#[pyclass(module = "avt", skip_from_py_object, eq)]
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Default)]
 struct Cell(avt::Cell);
 
@@ -33,7 +33,7 @@ impl Cell {
     }
 }
 
-#[pyclass(skip_from_py_object, frozen, eq, eq_int)]
+#[pyclass(module = "avt", skip_from_py_object, frozen, eq, eq_int)]
 #[derive(Debug, Copy, Clone, PartialEq, Eq)]
 enum Charset {
     Ascii,
@@ -65,7 +65,7 @@ impl Charset {
     }
 }
 
-#[pyclass(skip_from_py_object, frozen, eq)]
+#[pyclass(module = "avt", skip_from_py_object, frozen, eq)]
 #[derive(Debug, Copy, Clone, PartialEq, Eq)]
 enum Color{
     Indexed(u8),
@@ -90,7 +90,7 @@ impl From<Color> for avt::Color {
     }
 }
 
-#[pyclass(skip_from_py_object, frozen, eq)]
+#[pyclass(module = "avt", skip_from_py_object, frozen, eq)]
 #[derive(Clone, PartialEq)]
 struct Line(avt::Line);
 
@@ -142,7 +142,7 @@ impl Line {
     }
 }
 
-#[pyclass(skip_from_py_object, eq)]
+#[pyclass(module = "avt", skip_from_py_object, eq)]
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Default)]
 struct Pen(avt::Pen);
 
@@ -243,7 +243,7 @@ impl Pen {
     }
 }
 
-#[pyclass]
+#[pyclass(module = "avt")]
 #[derive(Debug)]
 struct Vt(avt::Vt);
 
@@ -319,13 +319,28 @@ impl Vt {
     }
 }
 
-// TODO: pub modules too:
-// parser.{Parser.{new, feed}, State, Function, AnsiMode, CtcOp, DecMode, EdScope, ElScope, SgrOp, TbcScope, XtwinopsOp}
-// terminal.{Cursor, Terminal.{new, size, active_buffer_type, execute, cursor, gc, changes, resize, view, lines, line, text, cursor_keys_app_mode, dump}, BufferType}
-// utils.{TextUnwrapper.{new, push, flush}, TextCollector.{new, feed_str, resize, flush}}
+mod parser;
+mod terminal;
+mod utils;
+
+fn add_submodule<'a>(
+    py: Python<'a>,
+    m: &Bound<'a, PyModule>,
+    init_submodule: impl FnOnce(Python<'a>, &Bound<'a, PyModule>) -> PyResult<()>,
+    name: &str,
+) -> PyResult<Bound<'a, PyModule>> {
+    let submodule = PyModule::new(py, name)?;
+    init_submodule(py, &submodule)?;
+    m.add_submodule(&submodule)?;
+    py.import("sys")?
+        .getattr("modules")?
+        .set_item(name, &submodule)?;
+
+    Ok(submodule)
+}
 
 #[pymodule(name = "avt")]
-fn avt_module(_py: Python<'_>, m: &Bound<'_, PyModule>) -> PyResult<()> {
+fn avt_module(py: Python<'_>, m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add("__version__", VERSION)?;
     m.add_class::<Cell>()?;
     m.add_class::<Charset>()?;
@@ -333,6 +348,10 @@ fn avt_module(_py: Python<'_>, m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_class::<Line>()?;
     m.add_class::<Pen>()?;
     m.add_class::<Vt>()?;
+
+    add_submodule(py, m, parser::init_module, "avt.parser")?;
+    add_submodule(py, m, terminal::init_module, "avt.terminal")?;
+    add_submodule(py, m, utils::init_module, "avt.utils")?;
 
     Ok(())
 }
