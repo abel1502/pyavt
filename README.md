@@ -2,7 +2,7 @@
 
 [![PyPI version](https://img.shields.io/pypi/v/pyavt.svg)](https://pypi.org/project/pyavt/)
 [![Python versions](https://img.shields.io/pypi/pyversions/pyavt.svg)](https://pypi.org/project/pyavt/)
-[![Downloads](https://pepy.tech/badge/pyavt)](https://pepy.tech/project/pyavt)
+[![PyPI Downloads](https://static.pepy.tech/personalized-badge/pyavt?period=total&units=INTERNATIONAL_SYSTEM&left_color=GREY&right_color=GREEN&left_text=downloads)](https://pepy.tech/projects/pyavt)
 [![CI](https://github.com/abel1502/pyavt/actions/workflows/CI.yml/badge.svg)](https://github.com/abel1502/pyavt)
 [![Type hints](https://img.shields.io/badge/typing-typed-blue.svg)](https://peps.python.org/pep-0484/)
 [![License](https://img.shields.io/pypi/l/pyavt.svg)](LICENSE)
