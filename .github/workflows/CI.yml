@@ -1,16 +1,8 @@
 name: CI
 
 on:
-  push:
-    # I don't think I need to build on every push, especially considering it doesn't do anything
-    # branches:
-    #   - main
-    #   - master
-    tags:
-      - '*'
-  # This may be on the chopping block too, but we'll see.
-  pull_request:
-  workflow_dispatch:
+  release:
+    types: [published]
 
 permissions:
   contents: read
@@ -158,7 +150,6 @@ jobs:
   release:
     name: Release
     runs-on: ubuntu-latest
-    if: ${{ startsWith(github.ref, 'refs/tags/') || github.event_name == 'workflow_dispatch' }}
     needs: [linux, musllinux, windows, macos, sdist]
     permissions:
       # Use to sign the release artifacts
@@ -173,16 +164,16 @@ jobs:
         uses: actions/attest-build-provenance@v3
         with:
           subject-path: 'wheels-*/*'
-      # - name: Create GitHub Release
-      #   if: ${{ startsWith(github.ref, 'refs/tags/') }}
-      #   uses: softprops/action-gh-release@v3
-      #   with:
-      #     files: wheels-*/*
+      - name: Upload release artifacts
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          shopt -s nullglob
+          files=(wheels-*/*)
+          gh release upload "${{ github.event.release.tag_name }}" "${files[@]}" --clobber
       - name: Install uv
-        if: ${{ startsWith(github.ref, 'refs/tags/') }}
         uses: astral-sh/setup-uv@v7
         with:
           cache-dependency-glob: ${{ github.action_path }}/uv.lock
       - name: Publish to PyPI
-        if: ${{ startsWith(github.ref, 'refs/tags/') }}
         run: uv publish --trusted-publishing=always 'wheels-*/*'
