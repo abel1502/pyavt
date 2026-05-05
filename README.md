@@ -67,7 +67,8 @@ print(vt.lines())
 print(vt.view())
 # All lines, but only the string values (no color, etc. metadata)
 print(vt.text())
-# All raw inputs to the terminal
+# The raw inputs that would result in the same screen contents as what's in view now...
+# Or so I think. Did I mention the original AVT is undocumented?
 print(repr(vt.dump()))
 ```
 
